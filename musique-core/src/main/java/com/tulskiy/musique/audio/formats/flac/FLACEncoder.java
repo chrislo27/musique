@@ -18,7 +18,6 @@
 package com.tulskiy.musique.audio.formats.flac;
 
 import com.tulskiy.musique.audio.Encoder;
-import com.tulskiy.musique.system.configuration.Configuration;
 import com.tulskiy.musique.util.AudioMath;
 import javaFlacEncoder.EncodingConfiguration;
 import javaFlacEncoder.FLACFileOutputStream;
@@ -41,7 +40,7 @@ public class FLACEncoder implements Encoder {
     private int unencodedSamples;
 
     @Override
-    public boolean open(File outputFile, AudioFormat fmt, Configuration options) {
+    public boolean open(File outputFile, AudioFormat fmt) {
         try {
             this.fmt = fmt;
             encoder = new javaFlacEncoder.FLACEncoder();

@@ -18,8 +18,6 @@
 package com.tulskiy.musique.audio.formats.ogg;
 
 import com.tulskiy.musique.audio.Encoder;
-import com.tulskiy.musique.system.configuration.Configuration;
-
 import org.xiph.libogg.ogg_packet;
 import org.xiph.libogg.ogg_page;
 import org.xiph.libogg.ogg_stream_state;
@@ -29,7 +27,6 @@ import javax.sound.sampled.AudioFormat;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
 
 /**
  * Based on sample VorbisEncoder from vorbis-java
@@ -46,21 +43,21 @@ public class VorbisEncoder implements Encoder {
     private vorbis_dsp_state vd;    // central working state for the packet->PCM decoder
     private vorbis_block vb;    // local working space for packet->PCM decode
     private FileOutputStream output;
-    private static final float DEFAULT_BITRATE = 0.3f;
+    public static final float DEFAULT_BITRATE = 0.3f;
 
     @Override
-    public boolean open(File outputFile, AudioFormat fmt, Configuration options) {
+    public boolean open(File outputFile, AudioFormat fmt) {
+        return open(outputFile, fmt, DEFAULT_BITRATE);
+    }
+
+    public boolean open(File outputFile, AudioFormat fmt, float quality) {
         vorbis_info vi = new vorbis_info();
         vorbisenc encoder = new vorbisenc();
 
-        float quality = DEFAULT_BITRATE;
-        if (options != null) {
-            quality = options.getFloat("encoder.vorbis.quality", DEFAULT_BITRATE);
-        }
-        logger.log(Level.INFO, "Starting encoding with {0} channels, {1} Hz, quality: {2}",
-                new Object[]{fmt.getChannels(), fmt.getSampleRate(), quality});
+//        logger.log(Level.INFO, "Starting encoding with {0} channels, {1} Hz, quality: {2}",
+//                new Object[]{fmt.getChannels(), fmt.getSampleRate(), quality});
         if (!encoder.vorbis_encode_init_vbr(vi, fmt.getChannels(), (int) fmt.getSampleRate(), quality)) {
-            logger.warning("Failed to Initialize vorbisenc");
+//            logger.warning("Failed to Initialize vorbisenc");
             return false;
         }
 
