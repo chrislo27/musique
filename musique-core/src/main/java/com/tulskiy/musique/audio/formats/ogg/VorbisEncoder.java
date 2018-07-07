@@ -47,10 +47,10 @@ public class VorbisEncoder implements Encoder {
 
     @Override
     public boolean open(File outputFile, AudioFormat fmt) {
-        return open(outputFile, fmt, DEFAULT_BITRATE);
+        return open(outputFile, fmt, DEFAULT_BITRATE, new vorbis_comment());
     }
 
-    public boolean open(File outputFile, AudioFormat fmt, float quality) {
+    public boolean open(File outputFile, AudioFormat fmt, float quality, vorbis_comment vc) {
         vorbis_info vi = new vorbis_info();
         vorbisenc encoder = new vorbisenc();
 
@@ -61,7 +61,6 @@ public class VorbisEncoder implements Encoder {
             return false;
         }
 
-        vorbis_comment vc = new vorbis_comment();
         vc.vorbis_comment_add_tag("ENCODER", "Java Vorbis Encoder");
 
         vd = new vorbis_dsp_state();
